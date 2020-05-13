@@ -4,6 +4,13 @@ from discord.ext import commands
 from discord.utils import get
 import os
 import Musik
+from Rule34 import send34
+from LolHentai import sendlolHentai
+from Watch2Gether import newRoom
+
+
+
+#Bot findet manchmal 100 manchmal 4 ergebnisse (.send angewomon)
 
 
 logger = logging.getLogger('discord')
@@ -14,8 +21,7 @@ logger.addHandler(handler)
 
 command_prefix = '.'
 bot = commands.Bot(command_prefix=command_prefix)
-Token = 'Njc0OTI3OTE1NDg1NjI2Mzc4.XkpqFQ.TkwSGm7HSqNeo8oYYVp3TKVNWhk'
-
+Token = 'Njc0OTI3OTE1NDg1NjI2Mzc4.XrWoSA.u_3Sj56BXhD71G2xh3kchxu6UDk'
 
 @bot.event
 async def on_ready():
@@ -24,13 +30,14 @@ async def on_ready():
 
 @bot.command(pass_context=True)
 async def join(ctx):
-    channel = ctx.message.author.voice.channel
+    channel_voice = ctx.message.author.voice.channel
+    channel_text = ctx.message.channel.id
     voice = get(bot.voice_clients, guild=ctx.guild)
 
     if voice and voice.is_connected():
-        await voice.move_to(channel)
+        await voice.move_to(channel_voice)
     else:
-        voice = await channel.connect()
+        voice = await channel_voice.connect()
 
 
 @bot.command(pass_context=True)
@@ -45,7 +52,14 @@ async def leave(ctx):
 
 @bot.command(pass_context=True)
 async def play(ctx, url: str):
-    await Musik.play(ctx, url, bot)
+    channel_voice = ctx.message.author.voice.channel
+    channel_text = ctx.message.channel.id
+    voice = get(bot.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_connected():
+        await voice.move_to(channel_voice)
+    else:
+        await Musik.play(ctx, url, bot)
 
 
 @bot.command(pass_context=True)
@@ -62,4 +76,42 @@ async def resume(ctx):
 async def stop(ctx):
     await Musik.stop(ctx, bot)
 
+
+@bot.command(pass_context=True)
+@commands.cooldown(1, 5, commands.BucketType.user)
+async def send(ctx, message):
+
+    channel_text = ctx.message.channel.id
+
+    if channel_text == 705521599880626217:
+    
+        try:
+            await send34(ctx, message, channel_text)
+
+        except Exception as e:
+            print(str(e))
+
+    elif channel_text == 708968847834873857:
+
+        try:
+            await sendlolHentai(ctx, message)
+
+        except Exception as e:
+            print(str(e))
+
+
+@bot.command(pass_context=True)
+async def test(ctx):
+    channel_voice = ctx.message.author.voice.channel
+
+    await ctx.send("test")
+
+
+@bot.command(pass_context=True)
+async def wg(ctx):
+
+    await newRoom(ctx)
+
+
 bot.run(Token)
+
