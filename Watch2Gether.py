@@ -2,32 +2,33 @@ from fake_useragent import UserAgent
 import discord
 import requests
 
-async def newRoom(ctx):
+async def newRoom(message, channel):
 
-    try:
+    if channel == 709111247362064394:
+        try:
 
-        streamkey = ""
+            streamkey = ""
 
-        ua = UserAgent()
+            ua = UserAgent()
 
-        parameter = {'share': 1, 'api_key': 'ujww212vghgcc2bwef4d'}
+            parameter = {'share': 1, 'api_key': 'ujww212vghgcc2bwef4d'}
 
-        r = requests.post("https://www.watch2gether.com/rooms/create.json",data=parameter)
+            r = requests.post("https://w2g.tv/rooms/create.json",data=parameter)
 
-        json = r.json()
+            json = r.json()
 
-        for key, value in json.items():
-            if key == "streamkey":
-                streamkey = value
-                await ctx.send("https://www.watch2gether.com/rooms/"+streamkey)
+            for key, value in json.items():
+                if key == "streamkey":
+                    streamkey = value
+                    await message.channel.send("https://w2g.tv/rooms/"+streamkey)
 
-            else:
-                continue
+                else:
+                    continue
 
-        
+            
 
-    except Exception as e:
-        print(e)
+        except Exception as e:
+            print(e)
 
    
     

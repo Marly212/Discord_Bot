@@ -51,6 +51,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
 async def play(ctx, url: str, bot):
     author = ctx.message.author
     channel = author.voice.channel
+    await ctx.send("Musik wird Heruntergeladen")
 
     vc = await channel.connect()
     player = await YTDLSource.from_url(url, loop=bot.loop)

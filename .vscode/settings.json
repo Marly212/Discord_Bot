@@ -1,3 +1,16 @@
 {
-    "python.pythonPath": "p:\\Programming\\Python\\Projekte\\Discord_Bot\\venv\\Scripts\\python.exe"
+    "python.pythonPath": "p:\\Programming\\Python\\Projekte\\Discord_Bot\\venv\\Scripts\\python.exe",
+    "python.testing.pytestArgs": [
+        "Pytest"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        ".",
+        "-p",
+        "*_test.py"
+    ]
 }

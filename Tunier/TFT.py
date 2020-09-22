@@ -1,0 +1,3 @@
+class TFT(self):
+
+    rules = ""
