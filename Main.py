@@ -1,9 +1,10 @@
 import discord
 import unittest
+from pprint import pprint
 from Rule34 import send34
 from Watch2Gether import newRoom
 from BronzeBravery import BronzeBravery
-
+from VirusTotal import vcheck
 
 class MyClient(discord.Client):
     #Einloggen
@@ -36,6 +37,9 @@ class MyClient(discord.Client):
 
         if message.content.startswith(".bravery"):
             await BronzeBravery(message)
+
+        if message.content.startswith(".check"):
+            await vcheck(message)
 
 
 client = MyClient()
