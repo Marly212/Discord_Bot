@@ -9,7 +9,7 @@
             "name": "Python: Aktuelle Datei",
             "type": "python",
             "request": "launch",
-            "program": ".\\Main.py",
+            "program": ".\\Main_Bot.py",
             "console": "integratedTerminal"
         }
     ]
