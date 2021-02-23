@@ -160,7 +160,7 @@ async def clear(ctx, arg):
             if arg.isdigit():
                 count = int(arg)+1
                 deleted = await ctx.channel.purge(limit=count,check=is_not_pinned)
-                await ctx.channel.send('{} Nachrichten gelöscht'.format(len(deleted)-1))
+                await ctx.channel.send('{} Nachrichten gelöscht'.format(len(deleted)-1),delete_after=5)
 
 @clear.error
 async def send_error(ctx, error):
@@ -187,10 +187,13 @@ async def check(ctx, arg):
     pass
     #await vcheck(arg)
 
+@bot.command()
+async def test(ctx):
+    await ctx.channel.send("123456789abcdefghijklmopqrstuvwxyz",tts=True)
 
 
 
-bot.run("Njc0OTI3OTE1NDg1NjI2Mzc4.Xjvtmg.lwg5G238UncUMFJahN2Z_EHYcnU")
+bot.run("Njc0OTI3OTE1NDg1NjI2Mzc4.Xjvtmg.lONd6VTccc2BqOLKCAOY4CsoF1k")
 
 
 
