@@ -2,16 +2,25 @@ import discord
 from discord.ext import commands
 import asyncio
 from pprint import pprint
-from Watch2Gether import newRoom
-from BronzeBravery import BronzeBravery
-from VirusTotal import vcheck
 import rule34
 import random
+import os
+from dotenv import load_dotenv
 
 #region variblen
 bot = commands.Bot(command_prefix='.')
 loop = bot.loop
 r34 = rule34.Rule34(loop)
+COGS = ['cogs.Watch2Gether']
+load_dotenv()
+
+#Cogs laden
+for cog in COGS:
+    try:
+        bot.load_extension(cog)
+    except Exception as e:
+        print(f'Could not load Cog {cog}: {str(e)}')
+
 #endregion
 autorole = {
     705509565881647114:{'memberroles': [742061678413348895], 'botroles': [705509886745641102]}
@@ -83,7 +92,6 @@ async def on_member_join(member):
                 if roleId:
                     await member.add_roles(role, reason='Autoroles', atomic=True)
 
-
 @bot.command()
 async def yuumi(ctx):
     await  ctx.channel.send("Hat sich gedacht komm erstmal yummi im clash auspacken weil richtig auf hurensohn \n"+
@@ -97,17 +105,16 @@ async def yuumi(ctx):
         "carrien zu können solang sie auch nur einen kompetenten teammate hat, for real \n"
         "mate 200 Jahre nur koks genommen oder was...",tts=True)
 
-
 @bot.command()    
 async def send(ctx, *, args):
     if ctx.channel.id == 711164822859022408 or ctx.channel.id == 705521599880626217:
         data = await r34.getImages(tags=args, randomPID=True)
-        r = await getRandomNumber(0, len(data))
-        #postData = await r34.getPostData(data[r].id)
-        #infoPanel = await embedRule34(postData)
-        #await ctx.channel.send(embed=infoPanel)
+        r = await getRandomNumber(0, len(data)-1) 
         await ctx.channel.send(data[r].file_url)
         await ctx.channel.send('Id: {}'.format(data[r].id))
+        postData = await r34.getPostData(data[r].id)
+        infoPanel = await rule34DataEmbed(postData)
+        await ctx.channel.send(embed=infoPanel)
 
 @send.error
 async def send_error(ctx, error):
@@ -115,21 +122,7 @@ async def send_error(ctx, error):
         await ctx.channel.send('Bitte Tags mitgeben')
     if isinstance(error, commands.CommandInvokeError):
         await ctx.channel.send('Kein Bilder zu den Tags gefunden')
-
-@bot.command()    
-async def info(ctx, args):
-    if args.isdigit():
-        postData = await r34.getPostData(args)
-        infoPanel = await rule34DataEmbed(postData)
-        await ctx.channel.send(embed=infoPanel)
-    else:
-        await ctx.channel.send('Bitte eine ID als Zahl mitgeben')
-
-@info.error
-async def send_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.channel.send('Bitte Id mitgeben')
-
+        
 @bot.command()
 async def userinfo(ctx, member: discord.Member):
     if member:
@@ -146,12 +139,10 @@ async def userinfo(ctx, member: discord.Member):
 
         await ctx.channel.send(embed=embed)
 
-
 @userinfo.error
 async def userinfo_error(ctx, error):
     if isinstance(error, commands.BadArgument):
         await ctx.send('User konnte nicht gefunden werden')
-
 
 @bot.command()      
 async def clear(ctx, arg):
@@ -167,20 +158,18 @@ async def send_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.channel.send('Bitte Zahl mitgeben')
 
-@bot.command(pass_context=True)
-async def wg(ctx):
-    if ctx.channel.id == 709111247362064394:
-        streamkey = await newRoom()
-        await ctx.channel.send("https://w2g.tv/rooms/"+streamkey)
-    else:
-        ctx.channel.send('Bitte den richtigen Channel benutzen')
-
+# @bot.command(pass_context=True)
+# async def wg(ctx):
+#     if ctx.channel.id == 709111247362064394:
+#         streamkey = await newRoom()
+#         await ctx.channel.send("https://w2g.tv/rooms/"+streamkey)
+#     else:
+#         ctx.channel.send('Bitte den richtigen Channel benutzen')
 
 @bot.command()
 async def bravery(ctx, arg):
     pass
     #await BronzeBravery(message)
-
 
 @bot.command()
 async def check(ctx, arg):
@@ -193,7 +182,7 @@ async def test(ctx):
 
 
 
-bot.run("Njc0OTI3OTE1NDg1NjI2Mzc4.Xjvtmg.lONd6VTccc2BqOLKCAOY4CsoF1k")
+bot.run(os.getenv('TOKEN'))
 
 
 
